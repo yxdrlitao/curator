@@ -1,6 +1,6 @@
 package cache
 
-import "github.com/curator-go/curator"
+import "github.com/yxdrlitao/curator"
 
 // TreeCacheListener represents listener for TreeCache changes
 type TreeCacheListener interface {

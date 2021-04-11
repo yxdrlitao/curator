@@ -1,7 +1,7 @@
 package curator
 
 import (
-	"github.com/samuel/go-zookeeper/zk"
+	"github.com/yxdrlitao/go-zookeeper/zk"
 )
 
 type CreateBuilder interface {

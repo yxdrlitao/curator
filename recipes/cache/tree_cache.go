@@ -13,8 +13,8 @@ import (
 	"math"
 	"strings"
 
-	"github.com/curator-go/curator"
 	"github.com/tevino/abool"
+	"github.com/yxdrlitao/curator"
 )
 
 // Logger provides customized logging within TreeCache.

@@ -4,9 +4,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/curator-go/curator"
-	"github.com/samuel/go-zookeeper/zk"
 	"github.com/stretchr/testify/mock"
+	"github.com/yxdrlitao/curator"
+	"github.com/yxdrlitao/go-zookeeper/zk"
 )
 
 type logFunc func(format string, args ...interface{})

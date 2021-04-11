@@ -3,9 +3,8 @@ package recipes
 import (
 	"testing"
 
-	"github.com/curator-go/curator"
-
 	. "github.com/smartystreets/goconvey/convey"
+	"github.com/yxdrlitao/curator"
 )
 
 func TestLockInternalsDriver(t *testing.T) {

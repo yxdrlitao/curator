@@ -4,9 +4,9 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/samuel/go-zookeeper/zk"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
+	"github.com/yxdrlitao/go-zookeeper/zk"
 )
 
 type CheckExistsBuilderTestSuite struct {

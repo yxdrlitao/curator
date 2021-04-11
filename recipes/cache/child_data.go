@@ -1,6 +1,6 @@
 package cache
 
-import "github.com/samuel/go-zookeeper/zk"
+import "github.com/yxdrlitao/go-zookeeper/zk"
 
 // ChildData contains data of a node including: stat, data, path
 type ChildData struct {

@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"time"
 
-	"github.com/curator-go/curator"
-	"github.com/samuel/go-zookeeper/zk"
+	"github.com/yxdrlitao/curator"
+	"github.com/yxdrlitao/go-zookeeper/zk"
 )
 
 // Debugging stats about operations

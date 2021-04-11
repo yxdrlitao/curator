@@ -1,8 +1,6 @@
 package curator
 
-import (
-	"github.com/samuel/go-zookeeper/zk"
-)
+import "github.com/yxdrlitao/go-zookeeper/zk"
 
 type deleteBuilder struct {
 	client                   *curatorFramework

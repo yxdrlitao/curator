@@ -3,8 +3,8 @@ package curator
 import (
 	"testing"
 
-	"github.com/samuel/go-zookeeper/zk"
 	"github.com/stretchr/testify/assert"
+	"github.com/yxdrlitao/go-zookeeper/zk"
 )
 
 func TestGetNodeFromPath(t *testing.T) {

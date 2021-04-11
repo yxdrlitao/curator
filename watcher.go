@@ -3,7 +3,7 @@ package curator
 import (
 	"sync"
 
-	"github.com/samuel/go-zookeeper/zk"
+	"github.com/yxdrlitao/go-zookeeper/zk"
 )
 
 type Watcher interface {
