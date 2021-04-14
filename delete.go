@@ -68,36 +68,30 @@ func (b *deleteBuilder) pathInForeground(path string, givenPath string) error {
 
 func (b *deleteBuilder) DeletingChildrenIfNeeded() DeleteBuilder {
 	b.deletingChildrenIfNeeded = true
-
 	return b
 }
 
 func (b *deleteBuilder) WithVersion(version int32) DeleteBuilder {
 	b.version = version
-
 	return b
 }
 
 func (b *deleteBuilder) InBackground() DeleteBuilder {
 	b.backgrounding = backgrounding{inBackground: true}
-
 	return b
 }
 
 func (b *deleteBuilder) InBackgroundWithContext(context interface{}) DeleteBuilder {
 	b.backgrounding = backgrounding{inBackground: true, context: context}
-
 	return b
 }
 
 func (b *deleteBuilder) InBackgroundWithCallback(callback BackgroundCallback) DeleteBuilder {
 	b.backgrounding = backgrounding{inBackground: true, callback: callback}
-
 	return b
 }
 
 func (b *deleteBuilder) InBackgroundWithCallbackAndContext(callback BackgroundCallback, context interface{}) DeleteBuilder {
 	b.backgrounding = backgrounding{inBackground: true, context: context, callback: callback}
-
 	return b
 }

@@ -302,6 +302,5 @@ func (p *ensurePath) Ensure(client CuratorZookeeperClient) error {
 	if p.helper != nil {
 		return p.helper.Ensure(client, p.path, p.makeLastNode)
 	}
-
 	return nil
 }

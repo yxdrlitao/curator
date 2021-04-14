@@ -224,36 +224,30 @@ func (b *setDataBuilder) pathInForeground(path string, payload []byte) (*zk.Stat
 
 func (b *setDataBuilder) WithVersion(version int32) SetDataBuilder {
 	b.version = version
-
 	return b
 }
 
 func (b *setDataBuilder) Compressed() SetDataBuilder {
 	b.compress = true
-
 	return b
 }
 
 func (b *setDataBuilder) InBackground() SetDataBuilder {
 	b.backgrounding = backgrounding{inBackground: true}
-
 	return b
 }
 
 func (b *setDataBuilder) InBackgroundWithContext(context interface{}) SetDataBuilder {
 	b.backgrounding = backgrounding{inBackground: true, context: context}
-
 	return b
 }
 
 func (b *setDataBuilder) InBackgroundWithCallback(callback BackgroundCallback) SetDataBuilder {
 	b.backgrounding = backgrounding{inBackground: true, callback: callback}
-
 	return b
 }
 
 func (b *setDataBuilder) InBackgroundWithCallbackAndContext(callback BackgroundCallback, context interface{}) SetDataBuilder {
 	b.backgrounding = backgrounding{inBackground: true, context: context, callback: callback}
-
 	return b
 }

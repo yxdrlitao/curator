@@ -21,7 +21,6 @@ var (
 
 type zookeeperHelper interface {
 	GetConnectionString() string
-
 	GetZookeeperConnection() (ZookeeperConnection, error)
 }
 
@@ -84,7 +83,6 @@ func (h *handleHolder) getConnectionString() string {
 	if helper != nil {
 		return helper.GetConnectionString()
 	}
-
 	return ""
 }
 
@@ -93,7 +91,6 @@ func (h *handleHolder) hasNewConnectionString() bool {
 	if helper != nil {
 		return h.ensembleProvider.ConnectionString() != helper.GetConnectionString()
 	}
-
 	return false
 }
 
@@ -102,7 +99,6 @@ func (h *handleHolder) getZookeeperConnection() (ZookeeperConnection, error) {
 	if helper != nil {
 		return helper.GetZookeeperConnection()
 	}
-
 	return nil, nil
 }
 
@@ -136,7 +132,6 @@ func (h *handleHolder) internalClose() error {
 			conn.Close()
 		}
 	}
-
 	return nil
 }
 
@@ -266,15 +261,11 @@ func (s *connectionState) checkTimeout() error {
 			s.handleNewConnectionString()
 		} else if elapsed >= maxTimeout {
 			log.Printf("Connection attempt unsuccessful after %v (greater than max timeout of %v). Resetting connection and trying again with a new connection.", elapsed, maxTimeout)
-
 			s.tracer.AddCount("session-timed-out", 1)
-
 			return s.reset()
 		} else {
 			log.Printf("Connection timed out for connection string (%s) and timeout (%v) / elapsed (%v)", s.zooKeeper.getConnectionString(), s.connectionTimeout, elapsed)
-
 			s.tracer.AddCount("connections-timed-out", 1)
-
 			return ErrConnectionLoss
 		}
 	}
@@ -283,25 +274,22 @@ func (s *connectionState) checkTimeout() error {
 }
 
 func (s *connectionState) process(event *zk.Event) {
-	//log.Printf("connectionState.process received %v with %d watchers", event, s.parentWatchers.Len())
-
+	log.Printf("connectionState.process received %v with %d watchers", event, s.parentWatchers.Len())
 	for _, watcher := range s.parentWatchers.watchers {
 		if watcher == nil {
 			continue
 		}
 		go func(w Watcher) {
 			tracer := newTimeTracer("connection-state-parent-process", s.tracer)
-
 			defer tracer.Commit()
-
 			w.process(event)
 		}(watcher)
 	}
 
 	if event.Type == zk.EventSession {
 		wasConnected := s.isConnected.Load()
-
 		if newIsConnected := s.checkState(event.State, event.Err, wasConnected); newIsConnected != wasConnected {
+			log.Printf("set isConnected old: %v to %v", wasConnected, newIsConnected)
 			s.isConnected.Set(newIsConnected)
 			s.connectionStart.Store(time.Now())
 		}
@@ -315,23 +303,18 @@ func (s *connectionState) checkState(state zk.State, err error, wasConnected boo
 	switch state {
 	case zk.StateHasSession:
 		isConnected = true
-
 	case zk.StateExpired:
 		isConnected = false
 		checkNewConnectionString = false
-
 		s.handleExpiredSession()
-
 	case zk.StateConnecting, zk.StateConnected, zk.StateDisconnected:
 		isConnected = false
-
 	default:
 		isConnected = false
 	}
 
 	if checkNewConnectionString && s.zooKeeper.hasNewConnectionString() {
 		isConnected = false
-
 		s.handleNewConnectionString()
 	}
 
@@ -340,9 +323,7 @@ func (s *connectionState) checkState(state zk.State, err error, wasConnected boo
 
 func (s *connectionState) handleNewConnectionString() {
 	log.Print("Connection string changed")
-
 	s.tracer.AddCount("connection-string-changed", 1)
-
 	if err := s.reset(); err != nil {
 		s.queueBackgroundException(err)
 	}
@@ -379,12 +360,10 @@ func (s *connectionState) dequeBackgroundException() error {
 	case err := <-s.backgroundErrors:
 		if err != nil {
 			s.tracer.AddCount("background-exceptions", 1)
-
 			return err
 		}
 	default:
 	}
-
 	return nil
 }
 

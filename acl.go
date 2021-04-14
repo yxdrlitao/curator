@@ -218,36 +218,30 @@ func (b *setACLBuilder) pathInForeground(path string) (*zk.Stat, error) {
 
 func (b *setACLBuilder) WithACL(acls ...zk.ACL) SetACLBuilder {
 	b.acling.aclList = acls
-
 	return b
 }
 
 func (b *setACLBuilder) WithVersion(version int32) SetACLBuilder {
 	b.version = version
-
 	return b
 }
 
 func (b *setACLBuilder) InBackground() SetACLBuilder {
 	b.backgrounding = backgrounding{inBackground: true}
-
 	return b
 }
 
 func (b *setACLBuilder) InBackgroundWithContext(context interface{}) SetACLBuilder {
 	b.backgrounding = backgrounding{inBackground: true, context: context}
-
 	return b
 }
 
 func (b *setACLBuilder) InBackgroundWithCallback(callback BackgroundCallback) SetACLBuilder {
 	b.backgrounding = backgrounding{inBackground: true, callback: callback}
-
 	return b
 }
 
 func (b *setACLBuilder) InBackgroundWithCallbackAndContext(callback BackgroundCallback, context interface{}) SetACLBuilder {
 	b.backgrounding = backgrounding{inBackground: true, context: context, callback: callback}
-
 	return b
 }

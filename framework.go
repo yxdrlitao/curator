@@ -155,14 +155,12 @@ func (b *CuratorFrameworkBuilder) Build() CuratorFramework {
 // Set the list of servers to connect to.
 func (b *CuratorFrameworkBuilder) ConnectString(connectString string) *CuratorFrameworkBuilder {
 	b.EnsembleProvider = &FixedEnsembleProvider{connectString}
-
 	return b
 }
 
 // Add connection authorization
 func (b *CuratorFrameworkBuilder) Authorization(scheme string, auth []byte) *CuratorFrameworkBuilder {
 	b.AuthInfos = append(b.AuthInfos, AuthInfo{scheme, auth})
-
 	return b
 }
 
@@ -171,7 +169,6 @@ func (b *CuratorFrameworkBuilder) Compression(name string) *CuratorFrameworkBuil
 	if provider, exists := CompressionProviders[name]; exists {
 		b.CompressionProvider = provider
 	}
-
 	return b
 }
 
@@ -260,55 +257,46 @@ func (c *curatorFramework) Started() bool {
 
 func (c *curatorFramework) Create() CreateBuilder {
 	c.state.Check(STARTED, "instance must be started before calling Create")
-
 	return &createBuilder{client: c, acling: acling{aclProvider: c.aclProvider}}
 }
 
 func (c *curatorFramework) Delete() DeleteBuilder {
 	c.state.Check(STARTED, "instance must be started before calling Delete")
-
 	return &deleteBuilder{client: c, version: AnyVersion}
 }
 
 func (c *curatorFramework) CheckExists() CheckExistsBuilder {
 	c.state.Check(STARTED, "instance must be started before calling CheckExists")
-
 	return &checkExistsBuilder{client: c}
 }
 
 func (c *curatorFramework) GetData() GetDataBuilder {
 	c.state.Check(STARTED, "instance must be started before calling GetData")
-
 	return &getDataBuilder{client: c}
 }
 
 func (c *curatorFramework) SetData() SetDataBuilder {
 	c.state.Check(STARTED, "instance must be started before calling SetData")
-
 	return &setDataBuilder{client: c, version: AnyVersion}
 }
 
 func (c *curatorFramework) GetChildren() GetChildrenBuilder {
 	c.state.Check(STARTED, "instance must be started before calling GetChildren")
-
 	return &getChildrenBuilder{client: c}
 }
 
 func (c *curatorFramework) GetACL() GetACLBuilder {
 	c.state.Check(STARTED, "instance must be started before calling GetACL")
-
 	return &getACLBuilder{client: c}
 }
 
 func (c *curatorFramework) SetACL() SetACLBuilder {
 	c.state.Check(STARTED, "instance must be started before calling SetACL")
-
 	return &setACLBuilder{client: c, version: AnyVersion, acling: acling{aclProvider: c.aclProvider}}
 }
 
 func (c *curatorFramework) InTransaction() Transaction {
 	c.state.Check(STARTED, "instance must be started before calling InTransaction")
-
 	return &curatorTransaction{client: c}
 }
 
@@ -318,7 +306,6 @@ func (c *curatorFramework) DoSync(path string, context interface{}) {
 
 func (c *curatorFramework) Sync() SyncBuilder {
 	c.state.Check(STARTED, "instance must be started before calling this method")
-
 	return &syncBuilder{client: c}
 }
 
@@ -341,7 +328,6 @@ func (c *curatorFramework) processEvent(event CuratorEvent) {
 
 	c.listeners.ForEach(func(l interface{}) {
 		tracer := c.client.StartTracer("EventListener")
-
 		defer tracer.Commit()
 
 		if err := l.(CuratorListener).EventReceived(c, event); err != nil {
@@ -354,13 +340,10 @@ func (c *curatorFramework) validateConnection(state zk.State) {
 	switch state {
 	case zk.StateDisconnected:
 		c.suspendConnection()
-
 	case zk.StateExpired:
 		c.stateManager.AddStateChange(LOST)
-
 	case zk.StateConnected:
 		c.stateManager.AddStateChange(RECONNECTED)
-
 	case zk.StateConnectedReadOnly:
 		c.stateManager.AddStateChange(READ_ONLY)
 	}
@@ -376,7 +359,6 @@ func (c *curatorFramework) suspendConnection() {
 
 func (c *curatorFramework) doSyncForSuspendedConnection(instanceIndex int64) {
 	tracer := c.client.StartTracer("BackgroundSyncImpl")
-
 	defer tracer.Commit()
 
 	if conn, err := c.client.Conn(); err == nil {
@@ -386,7 +368,6 @@ func (c *curatorFramework) doSyncForSuspendedConnection(instanceIndex int64) {
 				err:       err,
 				path:      path,
 			})
-
 			return
 		}
 	}
@@ -412,7 +393,6 @@ func (c *curatorFramework) NonNamespaceView() CuratorFramework {
 
 func (c *curatorFramework) UsingNamespace(newNamespace string) CuratorFramework {
 	c.state.Check(STARTED, "instance must be started before calling this method")
-
 	return c.namespaceFacadeCache.Get(newNamespace)
 }
 

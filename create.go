@@ -92,48 +92,40 @@ func (b *createBuilder) pathInForeground(path string, payload []byte) (string, e
 
 func (b *createBuilder) CreatingParentsIfNeeded() CreateBuilder {
 	b.createParentsIfNeeded = true
-
 	return b
 }
 
 func (b *createBuilder) WithMode(mode CreateMode) CreateBuilder {
 	b.createMode = mode
-
 	return b
 }
 
 func (b *createBuilder) WithACL(acls ...zk.ACL) CreateBuilder {
 	b.acling.aclList = acls
-
 	return b
 }
 
 func (b *createBuilder) Compressed() CreateBuilder {
 	b.compress = true
-
 	return b
 }
 
 func (b *createBuilder) InBackground() CreateBuilder {
 	b.backgrounding = backgrounding{inBackground: true}
-
 	return b
 }
 
 func (b *createBuilder) InBackgroundWithContext(context interface{}) CreateBuilder {
 	b.backgrounding = backgrounding{inBackground: true, context: context}
-
 	return b
 }
 
 func (b *createBuilder) InBackgroundWithCallback(callback BackgroundCallback) CreateBuilder {
 	b.backgrounding = backgrounding{inBackground: true, callback: callback}
-
 	return b
 }
 
 func (b *createBuilder) InBackgroundWithCallbackAndContext(callback BackgroundCallback, context interface{}) CreateBuilder {
 	b.backgrounding = backgrounding{inBackground: true, context: context, callback: callback}
-
 	return b
 }

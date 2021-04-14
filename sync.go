@@ -60,24 +60,20 @@ func (b *syncBuilder) pathInForeground(path string) (string, error) {
 
 func (b *syncBuilder) InBackground() SyncBuilder {
 	b.backgrounding = backgrounding{inBackground: true}
-
 	return b
 }
 
 func (b *syncBuilder) InBackgroundWithContext(context interface{}) SyncBuilder {
 	b.backgrounding = backgrounding{inBackground: true, context: context}
-
 	return b
 }
 
 func (b *syncBuilder) InBackgroundWithCallback(callback BackgroundCallback) SyncBuilder {
 	b.backgrounding = backgrounding{inBackground: true, callback: callback}
-
 	return b
 }
 
 func (b *syncBuilder) InBackgroundWithCallbackAndContext(callback BackgroundCallback, context interface{}) SyncBuilder {
 	b.backgrounding = backgrounding{inBackground: true, context: context, callback: callback}
-
 	return b
 }

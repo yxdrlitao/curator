@@ -100,10 +100,8 @@ type ListenerContainer struct {
 func (c *ListenerContainer) Add(listener interface{}) {
 	if c != nil {
 		c.lock.Lock()
-
+		defer c.lock.Unlock()
 		c.listeners = append(c.listeners, listener)
-
-		c.lock.Unlock()
 	}
 }
 
@@ -113,6 +111,7 @@ func (c *ListenerContainer) Remove(listener interface{}) {
 	}
 
 	c.lock.Lock()
+	defer c.lock.Unlock()
 
 	for i, l := range c.listeners {
 		if l == listener {
@@ -120,15 +119,12 @@ func (c *ListenerContainer) Remove(listener interface{}) {
 			break
 		}
 	}
-
-	c.lock.Unlock()
 }
 
 func (c *ListenerContainer) Len() int {
 	if c == nil {
 		return 0
 	}
-
 	return len(c.listeners)
 }
 
@@ -138,10 +134,9 @@ func (c *ListenerContainer) Clear() {
 	}
 
 	c.lock.Lock()
+	defer c.lock.Unlock()
 
 	c.listeners = nil
-
-	c.lock.Unlock()
 }
 
 func (c *ListenerContainer) ForEach(callback func(interface{})) {
@@ -150,12 +145,11 @@ func (c *ListenerContainer) ForEach(callback func(interface{})) {
 	}
 
 	c.lock.RLock()
+	defer c.lock.RUnlock()
 
 	for _, listener := range c.listeners {
 		callback(listener)
 	}
-
-	c.lock.RUnlock()
 }
 
 type connectionStateListenerContainer struct {

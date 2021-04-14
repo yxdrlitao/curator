@@ -80,36 +80,30 @@ func (b *checkExistsBuilder) pathInForeground(path string) (*zk.Stat, error) {
 
 func (b *checkExistsBuilder) Watched() CheckExistsBuilder {
 	b.watching.watched = true
-
 	return b
 }
 
 func (b *checkExistsBuilder) UsingWatcher(watcher Watcher) CheckExistsBuilder {
 	b.watching.watcher = b.client.getNamespaceWatcher(watcher)
-
 	return b
 }
 
 func (b *checkExistsBuilder) InBackground() CheckExistsBuilder {
 	b.backgrounding = backgrounding{inBackground: true}
-
 	return b
 }
 
 func (b *checkExistsBuilder) InBackgroundWithContext(context interface{}) CheckExistsBuilder {
 	b.backgrounding = backgrounding{inBackground: true, context: context}
-
 	return b
 }
 
 func (b *checkExistsBuilder) InBackgroundWithCallback(callback BackgroundCallback) CheckExistsBuilder {
 	b.backgrounding = backgrounding{inBackground: true, callback: callback}
-
 	return b
 }
 
 func (b *checkExistsBuilder) InBackgroundWithCallbackAndContext(callback BackgroundCallback, context interface{}) CheckExistsBuilder {
 	b.backgrounding = backgrounding{inBackground: true, context: context, callback: callback}
-
 	return b
 }

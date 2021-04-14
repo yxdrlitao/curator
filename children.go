@@ -95,42 +95,35 @@ func (b *getChildrenBuilder) pathInForeground(path string) ([]string, error) {
 
 func (b *getChildrenBuilder) StoringStatIn(stat *zk.Stat) GetChildrenBuilder {
 	b.stat = stat
-
 	return b
 }
 
 func (b *getChildrenBuilder) Watched() GetChildrenBuilder {
 	b.watching.watched = true
-
 	return b
 }
 
 func (b *getChildrenBuilder) UsingWatcher(watcher Watcher) GetChildrenBuilder {
 	b.watching.watcher = b.client.getNamespaceWatcher(watcher)
-
 	return b
 }
 
 func (b *getChildrenBuilder) InBackground() GetChildrenBuilder {
 	b.backgrounding = backgrounding{inBackground: true}
-
 	return b
 }
 
 func (b *getChildrenBuilder) InBackgroundWithContext(context interface{}) GetChildrenBuilder {
 	b.backgrounding = backgrounding{inBackground: true, context: context}
-
 	return b
 }
 
 func (b *getChildrenBuilder) InBackgroundWithCallback(callback BackgroundCallback) GetChildrenBuilder {
 	b.backgrounding = backgrounding{inBackground: true, callback: callback}
-
 	return b
 }
 
 func (b *getChildrenBuilder) InBackgroundWithCallbackAndContext(callback BackgroundCallback, context interface{}) GetChildrenBuilder {
 	b.backgrounding = backgrounding{inBackground: true, context: context, callback: callback}
-
 	return b
 }

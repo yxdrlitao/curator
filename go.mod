@@ -8,5 +8,5 @@ require (
 	github.com/smartystreets/goconvey v1.6.4 // indirect
 	github.com/stretchr/testify v1.7.0
 	github.com/tevino/abool v1.2.0 // indirect
-	github.com/yxdrlitao/go-zookeeper v0.0.0-20210411123112-14bbd785dc75
+	github.com/yxdrlitao/go-zookeeper v1.0.0 // indirect
 )

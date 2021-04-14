@@ -35,11 +35,9 @@ func (w *Watchers) Len() int { return len(w.watchers) }
 
 func (w *Watchers) Add(watcher Watcher) Watcher {
 	w.lock.Lock()
+	defer w.lock.Unlock()
 
 	w.watchers = append(w.watchers, watcher)
-
-	w.lock.Unlock()
-
 	return watcher
 }
 
@@ -54,7 +52,6 @@ func (w *Watchers) Remove(watcher Watcher) Watcher {
 			return watcher
 		}
 	}
-
 	return nil
 }
 

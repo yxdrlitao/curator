@@ -3,7 +3,6 @@ package curator
 import (
 	"log"
 	"sync/atomic"
-	"unsafe"
 )
 
 // A Closeable is a source or destination of data that can be closed.
@@ -16,7 +15,6 @@ func CloseQuietly(closeable Closeable) (err error) {
 	defer func() {
 		if v := recover(); v != nil {
 			log.Printf("panic when closing %s, %v", closeable, v)
-
 			err, _ = v.(error)
 		}
 	}()
@@ -24,7 +22,6 @@ func CloseQuietly(closeable Closeable) (err error) {
 	if err = closeable.Close(); err != nil {
 		log.Printf("fail to close %s, %s", closeable, err)
 	}
-
 	return
 }
 
@@ -39,16 +36,15 @@ func NewAtomicBool(b bool) AtomicBool {
 	if b {
 		return TRUE
 	}
-
 	return FALSE
 }
 
 func (b *AtomicBool) CompareAndSwap(oldValue, newValue bool) bool {
-	return atomic.CompareAndSwapInt32((*int32)(unsafe.Pointer(b)), int32(NewAtomicBool(oldValue)), int32(NewAtomicBool(newValue)))
+	return atomic.CompareAndSwapInt32((*int32)(b), int32(NewAtomicBool(oldValue)), int32(NewAtomicBool(newValue)))
 }
 
 func (b *AtomicBool) Load() bool {
-	return atomic.LoadInt32((*int32)(unsafe.Pointer(b))) != int32(FALSE)
+	return atomic.LoadInt32((*int32)(b)) != int32(FALSE)
 }
 
 func (b *AtomicBool) Swap(v bool) bool {
@@ -58,7 +54,7 @@ func (b *AtomicBool) Swap(v bool) bool {
 		n = TRUE
 	}
 
-	return atomic.SwapInt32((*int32)(unsafe.Pointer(b)), int32(n)) != int32(FALSE)
+	return atomic.SwapInt32((*int32)(b), int32(n)) != int32(FALSE)
 }
 
 func (b *AtomicBool) Set(v bool) { b.Swap(v) }
