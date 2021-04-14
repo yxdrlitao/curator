@@ -16,7 +16,6 @@ func (b *getChildrenBuilder) ForPath(givenPath string) ([]string, error) {
 
 	if b.backgrounding.inBackground {
 		go b.pathInBackground(adjustedPath, givenPath)
-
 		return nil, nil
 	}
 
@@ -29,7 +28,6 @@ func (b *getChildrenBuilder) ForPath(givenPath string) ([]string, error) {
 
 func (b *getChildrenBuilder) pathInBackground(adjustedPath, givenPath string) {
 	tracer := b.client.ZookeeperClient().StartTracer("getChildrenBuilder.pathInBackground")
-
 	defer tracer.Commit()
 
 	children, err := b.pathInForeground(adjustedPath)
@@ -68,7 +66,6 @@ func (b *getChildrenBuilder) pathInForeground(path string) ([]string, error) {
 
 			if b.watching.watched || b.watching.watcher != nil {
 				children, stat, events, err = conn.ChildrenW(path)
-
 				if events != nil && b.watching.watcher != nil {
 					go NewWatchers(b.watching.watcher).Watch(events)
 				}
