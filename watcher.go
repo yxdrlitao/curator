@@ -48,7 +48,6 @@ func (w *Watchers) Remove(watcher Watcher) Watcher {
 	for i, v := range w.watchers {
 		if v == watcher {
 			w.watchers = append(w.watchers[:i], w.watchers[i+1:]...)
-
 			return watcher
 		}
 	}

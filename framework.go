@@ -322,6 +322,7 @@ func (c *curatorFramework) UnhandledErrorListenable() UnhandledErrorListenable {
 }
 
 func (c *curatorFramework) processEvent(event CuratorEvent) {
+	//log.Printf("curatorFramework.process: %v watchedEvent: %v", event.Type(), event.WatchedEvent())
 	if event.Type() == WATCHED {
 		c.validateConnection(event.WatchedEvent().State)
 	}
@@ -353,7 +354,6 @@ func (c *curatorFramework) suspendConnection() {
 	if !c.stateManager.SetToSuspended() {
 		return
 	}
-
 	go c.doSyncForSuspendedConnection(c.client.InstanceIndex())
 }
 

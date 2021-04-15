@@ -15,8 +15,9 @@ import (
 const MAX_BACKGROUND_ERRORS = 10
 
 var (
-	ErrConnectionLoss = errors.New("connection loss")
-	ErrTimeout        = errors.New("timeout")
+	ErrConnectionLoss    = errors.New("connection loss")
+	ErrTimeout           = errors.New("timeout")
+	ErrConnectionTimeOut = errors.New("connection out")
 )
 
 type zookeeperHelper interface {
@@ -51,8 +52,10 @@ type zookeeperCache struct {
 	conn           ZookeeperConnection
 }
 
-func (c *zookeeperCache) GetConnectionString() string                          { return c.connnectString }
-func (c *zookeeperCache) GetZookeeperConnection() (ZookeeperConnection, error) { return c.conn, nil }
+func (c *zookeeperCache) GetConnectionString() string { return c.connnectString }
+func (c *zookeeperCache) GetZookeeperConnection() (ZookeeperConnection, error) {
+	return c.conn, nil
+}
 
 type handleHolder struct {
 	zookeeperDialer  ZookeeperDialer
@@ -129,6 +132,7 @@ func (h *handleHolder) internalClose() error {
 		if conn, err := h.getZookeeperConnection(); err != nil {
 			return err
 		} else if conn != nil {
+			log.Printf("关闭zk.conn")
 			conn.Close()
 		}
 	}
@@ -260,9 +264,10 @@ func (s *connectionState) checkTimeout() error {
 		if s.zooKeeper.hasNewConnectionString() {
 			s.handleNewConnectionString()
 		} else if elapsed >= maxTimeout {
-			log.Printf("Connection attempt unsuccessful after %v (greater than max timeout of %v). Resetting connection and trying again with a new connection.", elapsed, maxTimeout)
+			log.Printf("Connection attempt unsuccessful after %v (greater than max timeout of %v)", elapsed, maxTimeout)
 			s.tracer.AddCount("session-timed-out", 1)
-			return s.reset()
+			return ErrConnectionTimeOut
+			//return s.reset()
 		} else {
 			log.Printf("Connection timed out for connection string (%s) and timeout (%v) / elapsed (%v)", s.zooKeeper.getConnectionString(), s.connectionTimeout, elapsed)
 			s.tracer.AddCount("connections-timed-out", 1)
@@ -274,11 +279,12 @@ func (s *connectionState) checkTimeout() error {
 }
 
 func (s *connectionState) process(event *zk.Event) {
-	log.Printf("connectionState.process received %v with %d watchers", event, s.parentWatchers.Len())
+	//log.Printf("connectionState.process received: %v with: %d watchers", event, s.parentWatchers.Len())
 	for _, watcher := range s.parentWatchers.watchers {
 		if watcher == nil {
 			continue
 		}
+
 		go func(w Watcher) {
 			tracer := newTimeTracer("connection-state-parent-process", s.tracer)
 			defer tracer.Commit()
@@ -289,7 +295,6 @@ func (s *connectionState) process(event *zk.Event) {
 	if event.Type == zk.EventSession {
 		wasConnected := s.isConnected.Load()
 		if newIsConnected := s.checkState(event.State, event.Err, wasConnected); newIsConnected != wasConnected {
-			log.Printf("set isConnected old: %v to %v", wasConnected, newIsConnected)
 			s.isConnected.Set(newIsConnected)
 			s.connectionStart.Store(time.Now())
 		}
